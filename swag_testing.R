@@ -228,7 +228,7 @@ swag_network <- function(obj, mode = "undirected", weighted = F, show_net = T) {
 }
 
 
-swag_significance_test <- function(y, X, swag_obs, net_obs, pmax, alpha, sign_level, B) {
+swag_significance_test <- function(y, X, swag_obs, net_obs, p_max, q, sign_level = 0.05, B = 100) {
   
   library(DescTools)
   
@@ -252,7 +252,7 @@ swag_significance_test <- function(y, X, swag_obs, net_obs, pmax, alpha, sign_le
     y_null <- sample(y, length(y), replace = TRUE) 
     
     # Run SWAG under null
-    swag_null <- swag(y_null, X, p_max = pmax, q = alpha, family = "binomial")
+    swag_null <- swag(y_null, X, p_max = p_max, q = q, family = "binomial")
     net_null <- swag_network(swag_null)
     net_null$g <- delete_vertices(net_null$g, V(net_null$g)[degree(net_null$g) == 0])
     
