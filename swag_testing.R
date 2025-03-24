@@ -221,7 +221,18 @@ swag_network <- function(obj, mode = "undirected", weighted = F, show_net = T) {
   
   g <- graph_from_adjacency_matrix(intensity, mode = mode, weighted = NULL)
   
-  if(show_net == T) plot(g)
+  vertex_degrees_obs <- degree(g)
+  
+  E(g)$weight <- 1  
+  
+  # Simplify the graph, summing the weights of multiple edges
+  g_simplified_obs <- simplify(g, edge.attr.comb = list(weight = "sum"))
+  
+  # Set the edge width based on the combined weights
+  E(g_simplified_obs)$width <- E(g_simplified_obs)$weight
+  
+  
+  if(show_net == T) plot(g_simplified_obs, layout = layout.circle, vertex.color = "skyblue", edge.color = "black", vertex.size = 0.1*degree(g), edge.width = 0.1*E(g_simplified_obs)$width )
   
   return(list(g = g, models = models))
   
